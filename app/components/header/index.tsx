@@ -1,13 +1,13 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { appLabels } from '@/app/constants'
+import { useRouter } from 'next/navigation'
 
 const Header = () => {
   const router = useRouter()
 
   const handleNewTodo = () => {
-    router.push('/new-item')
+    router.push('/new-todo')
   }
   return (
     <section className="py-4">
