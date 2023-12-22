@@ -1,7 +1,7 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import Header from './index'
 import { appLabels } from '@/app/constants'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
+import Header from './index'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -29,7 +29,7 @@ describe('Header Component', () => {
     const buttonEl = screen.getByRole('button')
     fireEvent.click(buttonEl)
     await waitFor(() => {
-      expect(push).toHaveBeenCalledWith('/new-item')
+      expect(push).toHaveBeenCalledWith('/new-todo')
     })
   })
 })

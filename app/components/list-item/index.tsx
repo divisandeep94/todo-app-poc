@@ -1,26 +1,53 @@
+'use client'
+
 import { IListItemType } from '@/app/app-interfaces'
 import { appLabels } from '@/app/constants'
+import { atom, useAtom } from 'jotai'
+import Image from 'next/image'
+import editIcon from '../../../images/pencil-icon.png'
+import deleteIcon from '../../../images/trash-icon.png'
 
-interface IListItemProps {
-  items: IListItemType[]
-}
+export const todoListAtom = atom<IListItemType[]>([])
 
-const ListItem = (props: IListItemProps) => {
-  return !props.items || props.items.length === 0 ? (
+const ListItem = () => {
+  const [todoList, setTodoList] = useAtom(todoListAtom)
+
+  const handleTodoStatusChange = (itemId: string) => {
+    const updatedTodos = todoList.map((todo) => {
+      if (todo.id === itemId) {
+        todo.status = todo.status === 'Done' ? 'Active' : 'Done'
+      }
+      return todo
+    })
+    setTodoList(updatedTodos)
+  }
+
+  return !todoList || todoList.length === 0 ? (
     <div data-testid="no-todos-element">{appLabels.NO_TODOS_TEXT}</div>
   ) : (
     <ul data-testid="list-item-wrapper" className="pl-4">
-      {props.items.map(
-        (listItem) =>
-          listItem && (
-            <li key={listItem.id} className="flex gap-4 items-center">
-              <input type="checkbox" name="todo-list" id={listItem.id} className="cursor-pointer peer" />
-              <label
-                htmlFor={listItem.id}
-                className="cursor-pointer peer-checked:line-through peer-checked:text-slate-500"
-              >
-                {listItem.name}
+      {todoList.map(
+        (todo) =>
+          todo && (
+            <li key={todo.id} className="flex gap-4 items-center">
+              <input
+                type="checkbox"
+                name="todo-list"
+                id={todo.id}
+                className="cursor-pointer peer"
+                onChange={() => {
+                  handleTodoStatusChange(todo.id)
+                }}
+              />
+              <label htmlFor={todo.id} className="cursor-pointer  peer-checked:text-slate-500">
+                {todo.name}
               </label>
+              {todo.status === 'Active' && (
+                <>
+                  <Image src={editIcon} width={20} height={50} alt="edit-pencil-icon" className="cursor-pointer" />
+                  <Image src={deleteIcon} width={20} height={50} alt="delete-trash-icon" className="cursor-pointer" />
+                </>
+              )}
             </li>
           )
       )}
