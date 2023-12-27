@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { appLabels } from '../../constants'
+import { appLabels } from '../../app-constants'
 import { todoListAtom } from '../list-item'
 
 const CreateTodo = () => {
@@ -38,14 +38,14 @@ const CreateTodo = () => {
         onClick={handleCancel}
         className="border border-slate-300 text-slate-300 px-2 py-1 rounded hover:bg-slate-700 focus-within:bg-slate-700 outline-none"
       >
-        {appLabels.NEW_TODO_CANCEL_LABEL}
+        {appLabels.CANCEL_LABEL}
       </button>
       <button
         data-testid="todo-create-button"
         onClick={handleCreate}
         className="border border-slate-300 text-slate-300 px-2 py-1 rounded hover:bg-slate-700 focus-within:bg-slate-700 outline-none"
       >
-        {appLabels.NEW_TODO_SUBMIT_LABEL}
+        {appLabels.SUBMIT_LABEL}
       </button>
     </>
   )
