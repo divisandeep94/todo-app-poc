@@ -1,6 +1,6 @@
 'use client'
 
-import { appLabels } from '@/app/constants'
+import { appLabels } from '@/app/app-constants'
 import { useRouter } from 'next/navigation'
 
 const Header = () => {

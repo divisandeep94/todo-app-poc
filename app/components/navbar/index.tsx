@@ -1,4 +1,4 @@
-import { appLabels } from '@/app/constants'
+import { appLabels } from '@/app/app-constants'
 import Link from 'next/link'
 
 const Navbar = () => {

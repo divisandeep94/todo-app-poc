@@ -1,52 +1,17 @@
+import { appLabels } from '@/app/app-constants'
 import { IListItemType } from '@/app/app-interfaces'
-import { appLabels } from '@/app/constants'
-import { faker } from '@faker-js/faker'
+import { TestProvider, generateRandomData } from '@/app/test-utils/utils'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { Provider } from 'jotai'
-import { useHydrateAtoms } from 'jotai/utils'
 import ListItem, { todoListAtom } from '.'
 
-interface IHydrateAtomsProps {
-  initialValues: any
-  children: React.ReactNode
-}
+let todoItems: IListItemType[] = []
 
-interface ITestProviderProps {
-  initialValues: any
-  children: React.ReactNode
-}
-
-const HydrateAtoms: React.FC<IHydrateAtomsProps> = ({ initialValues, children }) => {
-  useHydrateAtoms(initialValues)
-  return children
-}
-
-const TestProvider: React.FC<ITestProviderProps> = ({ initialValues, children }) => (
-  <Provider>
-    <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
-  </Provider>
-)
-
-const todoItems: IListItemType[] = [
-  {
-    id: faker.string.uuid(),
-    name: faker.word.words(),
-    status: 'Active',
-  },
-  {
-    id: faker.string.uuid(),
-    name: faker.word.words(),
-    status: 'Active',
-  },
-  {
-    id: faker.string.uuid(),
-    name: faker.word.words(),
-    status: 'Active',
-  },
-]
+beforeEach(() => {
+  todoItems = generateRandomData(3)
+})
 
 describe('List-item Component', () => {
-  it('render list-item component', () => {
+  it('should render no todos message when no records are present', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, []]]}>
         <ListItem />
@@ -54,10 +19,11 @@ describe('List-item Component', () => {
     )
     expect(screen.getByTestId('no-todos-element')).toBeInTheDocument()
     expect(screen.getByText(appLabels.NO_TODOS_TEXT)).toBeInTheDocument()
-    expect(screen.queryByTestId('list-item-wrapper')).not.toBeInTheDocument()
+    const todoListWrapper = screen.queryByRole('list')
+    expect(todoListWrapper).not.toBeInTheDocument()
   })
 
-  it('render list-item component', () => {
+  it('should render the available list-items', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
         <ListItem />
@@ -67,7 +33,7 @@ describe('List-item Component', () => {
     expect(listItemEl.length).toBe(3)
   })
 
-  it('label is rendered with the right value', () => {
+  it('should render the list-items with the right value', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
         <ListItem />
@@ -96,5 +62,47 @@ describe('List-item Component', () => {
     const newBinIconElements = screen.getAllByAltText('delete-trash-icon')
     expect(newEditIconElements.length).toEqual(listElements.length - 2)
     expect(newBinIconElements.length).toEqual(listElements.length - 2)
+  })
+
+  it('should delete that todo item, when delete icon is clicked', async () => {
+    render(
+      <TestProvider initialValues={[[todoListAtom, todoItems]]}>
+        <ListItem />
+      </TestProvider>
+    )
+    const selectedTodoName = todoItems[0].name
+    expect(screen.getByText(selectedTodoName)).toBeInTheDocument()
+    const deleteIconElements = screen.getAllByAltText('delete-trash-icon')
+    fireEvent.click(deleteIconElements[0])
+    expect(screen.queryByText(selectedTodoName)).not.toBeInTheDocument()
+  })
+
+  it('should show no todos message, when the last todo item is deleted', () => {
+    const todoItems = generateRandomData(1)
+    render(
+      <TestProvider initialValues={[[todoListAtom, todoItems]]}>
+        <ListItem />
+      </TestProvider>
+    )
+    expect(screen.getAllByRole('listitem').length).toBe(1)
+    expect(screen.queryByText(appLabels.NO_TODOS_TEXT)).not.toBeInTheDocument()
+    const deleteIconElements = screen.getAllByAltText('delete-trash-icon')
+    fireEvent.click(deleteIconElements[0])
+    const availableTodoItems = screen.queryAllByRole('listitem')
+    expect(availableTodoItems.length).toBe(0)
+    expect(screen.getByText(appLabels.NO_TODOS_TEXT)).toBeInTheDocument()
+  })
+
+  it('should enable the edit field, when edit icon is clicked', () => {
+    render(
+      <TestProvider initialValues={[[todoListAtom, todoItems]]}>
+        <ListItem />
+      </TestProvider>
+    )
+    const editIconElements = screen.getAllByAltText('edit-pencil-icon')
+    fireEvent.click(editIconElements[0])
+    expect(screen.getByRole('textbox')).toBeInTheDocument()
+    expect(screen.getByText(appLabels.CANCEL_LABEL)).toBeInTheDocument()
+    expect(screen.getByText(appLabels.SUBMIT_LABEL)).toBeInTheDocument()
   })
 })

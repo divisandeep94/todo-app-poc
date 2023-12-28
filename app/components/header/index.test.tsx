@@ -1,4 +1,4 @@
-import { appLabels } from '@/app/constants'
+import { appLabels } from '@/app/app-constants'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 import Header from './index'
@@ -20,9 +20,10 @@ describe('Header Component', () => {
     expect(buttonEl).toHaveTextContent(appLabels.NEW_TODO_BUTTON_LABEL)
   })
 
-  test('new todo button click should re-direct to /new-item route', async () => {
+  test('new todo button click should re-direct to /new-todo route', async () => {
     const push = jest.fn()
-    ;(useRouter as jest.Mock).mockImplementation(() => ({
+    const mockRouter = useRouter as jest.Mock
+    mockRouter.mockImplementation(() => ({
       push,
     }))
     render(<Header />)
