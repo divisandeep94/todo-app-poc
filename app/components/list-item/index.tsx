@@ -4,16 +4,26 @@ import { appLabels } from '@/app/app-constants'
 import { IListItemType } from '@/app/app-interfaces'
 import { atom, useAtom } from 'jotai'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import editIcon from '../../../images/pencil-icon.png'
 import deleteIcon from '../../../images/trash-icon.png'
 import EditTodo from '../edit-todo'
 
 export const todoListAtom = atom<IListItemType[]>([])
 
-const ListItem = () => {
+interface IListProps {
+  initialTodos: IListItemType[]
+}
+
+const ListItem = ({ initialTodos }: IListProps) => {
   const [todoList, setTodoList] = useAtom(todoListAtom)
   const [editItem, setEditItem] = useState('')
+
+  useEffect(() => {
+    if (todoList.length === 0) {
+      setTodoList([...initialTodos])
+    }
+  }, [])
 
   const handleTodoStatusChange = (editTodoId: string) => {
     const updatedTodos = todoList.map((todo) => {

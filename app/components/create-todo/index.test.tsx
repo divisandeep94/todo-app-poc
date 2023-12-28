@@ -11,6 +11,8 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
 
+const initialTodos = generateRandomData(1)
+
 describe('New Todo Create Component:', () => {
   it('should render the new todo component elements', () => {
     render(<CreateTodo />)
@@ -73,7 +75,7 @@ describe('New Todo List:', () => {
     }))
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
         <CreateTodo />
       </TestProvider>
     )
