@@ -11,6 +11,9 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@ngneat/falso": "^7.1.1",
+    "casual": "^1.6.2",
+    "chance": "^1.1.11",
     "jotai": "^2.6.0",
     "next": "14.0.4",
     "react": "^18",
@@ -21,6 +24,7 @@
     "@faker-js/faker": "^8.3.1",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
+    "@types/chance": "^1.1.6",
     "@types/jest": "^29.5.11",
     "@types/node": "^20",
     "@types/react": "^18",

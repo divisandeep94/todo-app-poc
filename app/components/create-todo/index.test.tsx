@@ -8,7 +8,7 @@ import { appLabels } from '../../app-constants'
 import ListItem, { todoListAtom } from '../list-item'
 
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
+  useRouter: jest.fn()
 }))
 
 const initialTodos = generateRandomData(1)
@@ -37,7 +37,7 @@ describe('New Todo Create Component:', () => {
     const push = jest.fn()
     const mockRouter = useRouter as jest.Mock
     mockRouter.mockImplementation(() => ({
-      push,
+      push
     }))
     render(<CreateTodo />)
     const cancelButtonEl = screen.getByRole('button', { name: appLabels.CANCEL_LABEL })
@@ -51,7 +51,7 @@ describe('New Todo Create Component:', () => {
     const push = jest.fn()
     const mockRouter = useRouter as jest.Mock
     mockRouter.mockImplementation(() => ({
-      push,
+      push
     }))
     render(<CreateTodo />)
     const inputEl = screen.getByPlaceholderText(appLabels.NEW_TODO_INPUT_PLACEHOLDER_TEXT)
@@ -71,7 +71,7 @@ describe('New Todo List:', () => {
     const push = jest.fn()
     const mockRouter = useRouter as jest.Mock
     mockRouter.mockImplementation(() => ({
-      push,
+      push
     }))
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
