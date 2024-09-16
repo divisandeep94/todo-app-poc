@@ -10,11 +10,13 @@ beforeEach(() => {
   todoItems = generateRandomData(3)
 })
 
+const initialTodos = generateRandomData(1)
+
 describe('List-item Component', () => {
   it('should render no todos message when no records are present', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, []]]}>
-        <ListItem />
+        <ListItem initialTodos={[]} />
       </TestProvider>
     )
     expect(screen.getByTestId('no-todos-element')).toBeInTheDocument()
@@ -26,7 +28,7 @@ describe('List-item Component', () => {
   it('should render the available list-items', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
       </TestProvider>
     )
     const listItemEl = screen.getAllByRole('listitem')
@@ -36,7 +38,7 @@ describe('List-item Component', () => {
   it('should render the list-items with the right value', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
       </TestProvider>
     )
     const labelText = todoItems[0].name
@@ -48,7 +50,7 @@ describe('List-item Component', () => {
   it('on-check of todo, should hide the edit and bin icon', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
       </TestProvider>
     )
     const listElements = screen.getAllByRole('checkbox')
@@ -67,7 +69,7 @@ describe('List-item Component', () => {
   it('should delete that todo item, when delete icon is clicked', async () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
       </TestProvider>
     )
     const selectedTodoName = todoItems[0].name
@@ -81,7 +83,7 @@ describe('List-item Component', () => {
     const todoItems = generateRandomData(1)
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={[]} />
       </TestProvider>
     )
     expect(screen.getAllByRole('listitem').length).toBe(1)
@@ -96,7 +98,7 @@ describe('List-item Component', () => {
   it('should enable the edit field, when edit icon is clicked', () => {
     render(
       <TestProvider initialValues={[[todoListAtom, todoItems]]}>
-        <ListItem />
+        <ListItem initialTodos={initialTodos} />
       </TestProvider>
     )
     const editIconElements = screen.getAllByAltText('edit-pencil-icon')
